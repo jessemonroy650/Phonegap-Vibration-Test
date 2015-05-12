@@ -33,6 +33,11 @@
     }
 	//
 	function onDeviceReady() {
+		// hide Exit button. They don't have one on iOS devices.
+		if (device.platform === "iOS") {
+			//alert("got iOS");
+			$("#exitApp").addClass("hidden");
+		}
 		buttonsEnable();
 		thePlace = document.getElementById('vibrate');
 		thePlace.addEventListener('click', function(e) {
@@ -56,7 +61,7 @@
 </head>
 <body onload="onLoad()">
 <div class="button button-block button-large"><img align=left src=favicon-48x48.png>Vibration</div>
-<span onclick='navigator.app.exitApp()' style="float:right;"><button class="button button-pill button-primary button-large" style="margin:1em;">Exit</button></span>
+<span onclick='navigator.app.exitApp()' style="float:right;"><button id=exitApp class="button button-pill button-primary button-large" style="margin:1em;">Exit</button></span>
 <p class=clear />
 
 <center>
