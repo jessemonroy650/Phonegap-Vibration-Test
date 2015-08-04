@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>PhoneGap Network Information Test</title>
+    <title>Vibration</title>
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="buttons.css" />
     <style>
@@ -10,57 +10,65 @@
     .hidden {visibility:collapse;display:none;}
     .expose {visibility:visible;display:block;} /* Here for completeness only. */
     .copyright {padding:5px;align:left;font-style:italic;font-size:small;}
-    #exitApp {margin:1em;}
+    #header {margin:0;padding:0;}
+    #exitApp {margin:0.1em;float:right;}
     </style>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript">
     var my_media = null;
     var mediaTimer = null;
     // Wait for PhoneGap to load
-	document.addEventListener("deviceready", onDeviceReady, false);
-	//
+    document.addEventListener("deviceready", onDeviceReady, false);
+    //
     function buttonVibrate(time) {
-		navigator.vibrate(time)
+        navigator.vibrate(time)
     }
-	//
+    //
     function buttonsDisable() {
-		thePlace = document.getElementById('vibrate');
-		thePlace.classList.add('disabled');
+        thePlace = document.getElementById('vibrate');
+        thePlace.classList.add('disabled');
     }
     function buttonsEnable() {
-		thePlace = document.getElementById('vibrate');
-		thePlace.classList.remove('disabled');
+        thePlace = document.getElementById('vibrate');
+        thePlace.classList.remove('disabled');
     }
-	//
-	function onDeviceReady() {
-		// hide Exit button. They don't have one on iOS devices.
-		if (device.platform === "iOS") {
-			//alert("got iOS");
-			// http://www.mzcart.com/javascript-how-to-addremove-css-class-from-a-dom-element/
-			document.getElementById('exitApp').classList.add("hidden");
-		}
-		buttonsEnable();
-		thePlace = document.getElementById('vibrate');
-		thePlace.addEventListener('click', function(e) {
-				//alert('got click');
-				buttonVibrate(3000);
-			});
-	}
-	//
-	function onLoad() {
-	}
+    //
+    function onDeviceReady() {
+        if (device.platform === "iOS") {
+            //alert("got iOS");
+            // hide Exit button. They don't have one on iOS devices.
+            // http://www.mzcart.com/javascript-how-to-addremove-css-class-from-a-dom-element/
+            document.getElementById('exitApp').classList.add("hidden");
+            /* deals with post-iOS-7 change that covers the status bar */
+            /* http://coenraets.org/blog/2013/09/phonegap-and-cordova-with-ios-7/ */
+            document.body.style.marginTop = "20px";
+        } else if (device.platform == 'Android') {
+            // Get rid of 300ms delay 
+            document.addEventListener('DOMContentLoaded', function() { FastClick.attach(document.body); }, false);
+        }
+        // The button has been disabled, until we get the 'deviceready' event.
+        buttonsEnable();
+        thePlace = document.getElementById('vibrate');
+        thePlace.addEventListener('click', function(e) {
+                //alert('got click');
+                buttonVibrate(3000);
+            });
+    }
+    //
+    function onLoad() {
+    }
 
     </script>
 </head>
 <body onload="onLoad()">
-<div class="button button-block button-large"><img align=left src=favicon-48x48.png>Vibration</div>
-
-<button id=exitApp onclick='navigator.app.exitApp()' class="button button-pill button-primary button-large" style="margin:1em;">Exit</button>
-
+<div id=header class="button button-block button-large">
+    <img align=left src=favicon-48x48.png>
+    Vibration
+    <button id=exitApp onclick='navigator.app.exitApp()' class="button button-pill button-primary button-large" style="margin:1em;">Exit</button>
+</div>
 <p class=clear />
-
 <center>
-	<div id=vibrate class="button button-pill button-action button-large disabled" style="margin:1em;">Vibrate</div>
+    <div id=vibrate class="button button-pill button-action button-large disabled" style="margin:1em;">Vibrate</div>
 </center>
 
 <div class="copyright" style="padding:5px;align:left;font-style:italic;font-size:small;">
